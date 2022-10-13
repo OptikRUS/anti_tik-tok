@@ -1,0 +1,17 @@
+version: "3.11"
+
+services:
+
+# database service
+  postgres_db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "password123456"
+      POSTGRES_DB: "anti_tik-tok_db"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5432:5432"
+    restart: always
+
+#DATABASE_URL = "postgresql+asyncpg://admin:password123456@postgres_db:5432/anti_tik-tok_db"
