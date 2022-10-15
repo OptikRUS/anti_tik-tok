@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from api import video_router
 
 from database_config import database, metadata, engine
+from videos.api import video_router
 
 app = FastAPI()
 

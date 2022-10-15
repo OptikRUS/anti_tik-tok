@@ -3,20 +3,8 @@ from typing import Optional
 
 import ormar
 
-from database_config import metadata, database
-
-
-class MainMeta(ormar.ModelMeta):
-    metadata = metadata
-    database = database
-
-
-class User(ormar.Model):
-    class Meta(MainMeta):
-        pass
-
-    id: int = ormar.Integer(primary_key=True)
-    username: str = ormar.String(max_length=32)
+from database_config import MainMeta
+from users.models import User
 
 
 class Video(ormar.Model):

@@ -4,9 +4,10 @@ from fastapi import APIRouter, UploadFile, File, Form, BackgroundTasks, Request
 from fastapi.responses import StreamingResponse, HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from schemas import GetVideo, GetVideoList
-from models import Video, User
-from services import save_video, open_file
+from .schemas import GetVideo, GetVideoList
+from .models import Video
+from .services import save_video, open_file
+from users.models import User
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 templates = Jinja2Templates(directory="templates")
@@ -37,9 +38,9 @@ async def get_video(request: Request, video_pk: int):
 
 @video_router.get("/video/{video_pk}", response_class=HTMLResponse)
 async def get_video(request: Request, video_pk: int) -> StreamingResponse:
-    file, status_code, content_length, headers = await open_file(request, video_pk)
+    file_, status_code, content_length, headers = await open_file(request, video_pk)
     response = StreamingResponse(
-        file,
+        file_,
         media_type="video/mov",
         status_code=status_code
     )

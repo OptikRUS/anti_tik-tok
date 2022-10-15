@@ -3,12 +3,11 @@ from pathlib import Path
 from typing import Generator, IO
 from uuid import uuid4
 
-import aiofiles as aiofiles
 import ormar
 from fastapi import UploadFile, BackgroundTasks, HTTPException, Request
 
-from schemas import UploadVideo
-from models import Video, User
+from .schemas import UploadVideo
+from .models import Video, User
 
 
 async def save_video(

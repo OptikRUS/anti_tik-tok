@@ -2,10 +2,7 @@ import datetime
 
 from pydantic import BaseModel
 
-
-class User(BaseModel):
-    id: int
-    username: str
+from users.schemas import User
 
 
 class UploadVideo(BaseModel):
