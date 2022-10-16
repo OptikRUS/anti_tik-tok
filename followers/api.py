@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
 from .schemas import FollowerCreate, FollowerCreateResponse, FollowerList, FollowingList
 from .models import Follower
@@ -18,13 +19,19 @@ async def add_follower(follower: FollowerCreate):
 @followers_router.get("/", response_model=list[FollowingList], description='following list')
 async def following_list():
     user = await User.objects.get(pk=2)
-    print(user)
-    res = await Follower.objects.select_related("user").filter(subscriber=user).all()
-    print(res)
-    return res
+    return await Follower.objects.select_related("user").filter(subscriber=user).all()
 
 
 @followers_router.get("/me", response_model=list[FollowerList], description='followers list')
 async def followers_list():
     user = await User.objects.first()
-    return await Follower.objects.select_related(["user", "subscriber"]).filter(user=user).all()
+    return await Follower.objects.select_related("subscriber").filter(user=user).all()
+
+
+@followers_router.delete("/{follower_pk}", status_code=204, description='delete follower')
+async def delete_follower(follower_pk: int):
+    user = await User.objects.first()
+    follower = await Follower.objects.get_or_none(user=user, subscriber=follower_pk)
+    if follower:
+        return await follower.delete()
+    return JSONResponse(status_code=404, content={"detail": "This subscription does not exist"})
