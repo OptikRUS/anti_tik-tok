@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from database_config import database, metadata, engine
 from videos.api import video_router
 
-app = FastAPI()
+app = FastAPI(title="FastApi Video hosting", version='0.1.1', description="Simple video hosting")
 
 app.state.database = database
 metadata.create_all(engine)
