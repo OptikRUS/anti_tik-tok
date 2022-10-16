@@ -2,6 +2,8 @@ from fastapi import FastAPI
 
 from database_config import database, metadata, engine
 from videos.api import video_router
+from users.api import users_router
+from followers.api import followers_router
 
 app = FastAPI(title="FastApi Video hosting", version='0.1.1', description="Simple video hosting")
 
@@ -24,3 +26,5 @@ async def shutdown() -> None:
 
 
 app.include_router(video_router)
+app.include_router(users_router)
+app.include_router(followers_router)

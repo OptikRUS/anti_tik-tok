@@ -4,15 +4,14 @@ from fastapi import APIRouter, UploadFile, File, Form, BackgroundTasks, Request
 from fastapi.responses import StreamingResponse, HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from .schemas import GetVideo, GetVideoList
-from .models import Video
+from .schemas import GetVideo
 from .services import save_video, open_file
 from users.models import User
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 templates = Jinja2Templates(directory="templates")
 
-video_router = APIRouter()
+video_router = APIRouter(tags=["videos"])
 
 
 @video_router.post("/upload", status_code=201, response_model=GetVideo)
@@ -24,11 +23,6 @@ async def create_video(
 ):
     user = await User.objects.first()
     return await save_video(user, title, description, upload_video_file, back_task)
-
-
-@video_router.get("/user/{user_pk}", response_model=list[GetVideoList])
-async def get_list_video(user_pk: int):
-    return await Video.objects.filter(user=user_pk).all()
 
 
 @video_router.get("/index/{video_pk}", response_class=HTMLResponse)
